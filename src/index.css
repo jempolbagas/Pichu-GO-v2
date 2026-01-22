@@ -1,4 +1,28 @@
 @import "tailwindcss";
+
+@theme {
+    --font-sans: 'Poppins', sans-serif;
+}
+
 body {
-    background-color: #f3f4f6;
+    /* Soft Pink Gradient matching Screenshot */
+    background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+    /* Or the specific pink-to-white from screenshot: */
+    background-image: linear-gradient(180deg, #FFC7E1 0%, #FFF0F5 50%, #FFC7E1 100%);
+
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #FBCFE8;
+    border-radius: 10px;
 }
