@@ -101,11 +101,11 @@ The calculation logic must remain domain-specific. Do not change variable names.
 
 #### Phase 1: Foundation (Tailwind v4 Setup)
 
-* [ ] Initialize Project: `npm create vite@latest pichu-go-web -- --template react`
-* [ ] Install Tailwind v4: `npm install tailwindcss @tailwindcss/vite`
-* [ ] Configure Vite: Add `tailwindcss()` to plugins in `vite.config.js`.
-* [ ] Set up CSS: Add `@import "tailwindcss";` and `@theme` variables (Primary Color, Aurora Animation) in `src/index.css`.
-* [ ] Create the `pichu-config` Google Sheet and add dummy data.
+* [x] Initialize Project: `npm create vite@latest pichu-go-web -- --template react`
+* [x] Install Tailwind v4: `npm install tailwindcss @tailwindcss/vite`
+* [x] Configure Vite: Add `tailwindcss()` to plugins in `vite.config.js`.
+* [x] Set up CSS: Add `@import "tailwindcss";` and `@theme` variables (Primary Color, Aurora Animation) in `src/index.css`.
+* [x] Create the `pichu-config` Google Sheet and add dummy data.
 
 #### Phase 2: The Middleman
 
