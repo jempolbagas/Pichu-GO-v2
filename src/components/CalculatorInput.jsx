@@ -1,58 +1,55 @@
 // src/components/CalculatorInput.jsx
-import React from 'react';
-import { Minus, Plus, HelpCircle } from 'lucide-react'; // Make sure to install: npm install lucide-react
+import { Plus, Minus } from 'lucide-react';
 
 export default function CalculatorInput({
                                             label,
                                             value,
                                             onChange,
+                                            placeholder,
                                             onIncrement,
                                             onDecrement,
-                                            placeholder,
                                             helpText
                                         }) {
     return (
-        <div className="mb-6">
-            {/* Label Row */}
-            <div className="flex items-center gap-2 mb-2 ml-1">
-                <span className="text-sm font-bold text-gray-700">{label}</span>
-                {helpText && (
-                    <div className="group relative">
-                        <HelpCircle size={16} className="text-gray-400 cursor-help" />
-                        <div className="absolute left-full top-0 ml-2 w-48 bg-gray-800 text-white text-xs rounded p-2 hidden group-hover:block z-10">
-                            {helpText}
-                        </div>
-                    </div>
-                )}
-            </div>
+        <div className="flex flex-col gap-2 group">
+            {/* Label with glowing text effect */}
+            <label className="text-xs font-bold uppercase tracking-widest text-purple-200/70 group-hover:text-purple-200 transition-colors">
+                {label}
+            </label>
 
-            {/* Input Capsule */}
-            <div className="bg-white rounded-full flex items-center p-1 shadow-sm border border-pink-100 focus-within:ring-2 focus-within:ring-pink-400 transition-all h-12">
-                {/* Text Input */}
+            <div className="relative flex items-center">
+                {/* Minus Button */}
+                <button
+                    onClick={onDecrement}
+                    className="absolute left-0 z-10 p-2 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all active:scale-90"
+                >
+                    <Minus size={16} />
+                </button>
+
+                {/* The Input Field */}
                 <input
                     type="number"
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     placeholder={placeholder}
-                    className="bg-transparent w-full pl-6 font-bold text-gray-700 outline-none text-lg placeholder-gray-300"
+                    className="w-full bg-white/5 border-b-2 border-white/10 py-4 px-10 text-center text-xl font-bold text-white placeholder-white/20 focus:outline-none focus:border-purple-400 focus:bg-white/10 transition-all rounded-t-lg"
                 />
 
-                {/* Stepper Buttons */}
-                <div className="flex items-center gap-1 pr-1">
-                    <button
-                        onClick={onDecrement}
-                        className="w-8 h-8 flex items-center justify-center rounded-full bg-pink-50 text-pink-600 hover:bg-pink-200 transition-colors active:scale-95"
-                    >
-                        <Minus size={16} strokeWidth={3} />
-                    </button>
-                    <button
-                        onClick={onIncrement}
-                        className="w-8 h-8 flex items-center justify-center rounded-full bg-pink-50 text-pink-600 hover:bg-pink-200 transition-colors active:scale-95"
-                    >
-                        <Plus size={16} strokeWidth={3} />
-                    </button>
-                </div>
+                {/* Plus Button */}
+                <button
+                    onClick={onIncrement}
+                    className="absolute right-0 z-10 p-2 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all active:scale-90"
+                >
+                    <Plus size={16} />
+                </button>
             </div>
+
+            {/* Help Text */}
+            {helpText && (
+                <p className="text-[10px] text-white/30 text-center tracking-wide font-medium">
+                    {helpText}
+                </p>
+            )}
         </div>
     );
 }
