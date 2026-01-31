@@ -1,81 +1,78 @@
-// src/components/ResultCard.jsx
-import React from 'react';
-import { ShoppingBag, Plane, Copy, Check } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
-export default function ResultCard({ result, isKr }) {
-    const [copied, setCopied] = React.useState(false);
+export default function ResultCard({ result }) {
+    // Local state for number animation (basic counting effect)
+    const [displayTotal, setDisplayTotal] = useState(0);
 
-    // Helper to copy the total to clipboard
-    const handleCopy = () => {
-        navigator.clipboard.writeText(`Rp ${result.total.toLocaleString('id-ID')}`);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
+    useEffect(() => {
+        // Simple easing for the total number
+        let start = displayTotal;
+        const end = result.total;
+        const duration = 1000;
+        const startTime = performance.now();
+
+        const animate = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Ease out quart
+            const ease = 1 - Math.pow(1 - progress, 4);
+
+            const current = Math.floor(start + (end - start) * ease);
+            setDisplayTotal(current);
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+
+        requestAnimationFrame(animate);
+    }, [result.total]);
 
     return (
-        <div className="flex-1 bg-white/70 backdrop-blur-2xl rounded-3xl p-8 flex flex-col justify-between shadow-[0_20px_40px_-12px_rgba(0,0,0,0.1)] border border-white/60 relative overflow-hidden group">
-
-            {/* Decorative background glow */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-pink-300 rounded-full blur-[60px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
+        <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.5, type: "spring" }}
+            className="mt-8 bg-solar-bg p-4 border-4 border-inset border-gray-700 rounded-sm shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] relative overflow-hidden"
+        >
+            {/* Scanline Effect */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] ml-0 bg-[length:100%_2px,3px_100%] pointer-events-none z-10 opacity-20"></div>
 
             {/* Header */}
-            <div className="relative z-10">
-                <div className="flex items-center justify-between mb-2">
-                    <p className="text-xs font-bold tracking-[0.2em] uppercase text-gray-500">
-                        Estimated Total
-                    </p>
-                    <button
-                        onClick={handleCopy}
-                        className="p-2 rounded-full hover:bg-white/50 text-gray-400 hover:text-pink-600 transition-colors"
-                        title="Copy Total"
+            <div className="flex justify-between items-center mb-2 border-b border-solar-text/20 pb-1">
+                <span className="text-[10px] text-solar-text/70 font-sans font-bold tracking-widest">SOLAR POWERED</span>
+                <div className="flex gap-1">
+                    <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                    <div className="w-2 h-2 rounded-full bg-yellow-500 opacity-50"></div>
+                    <div className="w-2 h-2 rounded-full bg-green-500 opacity-50"></div>
+                </div>
+            </div>
+
+            {/* Results Content */}
+            <div className="space-y-1 font-pixel text-solar-text text-shadow-glow">
+                <div className="flex justify-between text-xl opacity-80 border-b border-solar-text/10 pb-1">
+                    <span>BASE:</span>
+                    <span>{result.itemPrice.toLocaleString('id-ID')}</span>
+                </div>
+                <div className="flex justify-between text-xl opacity-80 border-b border-solar-text/10 pb-1">
+                    <span>FEES:</span>
+                    <span>{result.fees.toLocaleString('id-ID')}</span>
+                </div>
+
+                {/* Total */}
+                <div className="flex justify-between text-4xl font-bold mt-4 pt-2 tracking-wider text-white drop-shadow-[0_0_5px_rgba(74,222,128,0.8)]">
+                    <span className="text-solar-text">TOT:</span>
+                    <motion.div
+                        key={result.total}
+                        initial={{ scale: 1.2, color: '#fff' }}
+                        animate={{ scale: 1, color: '#fff' }}
                     >
-                        {copied ? <Check size={16} /> : <Copy size={16} />}
-                    </button>
-                </div>
-
-                {/* Big Total */}
-                <h2 className="text-5xl md:text-6xl font-black text-slate-800 tracking-tighter mb-8">
-                    <span className="text-2xl align-top opacity-50 font-bold mr-1">Rp</span>
-                    {result.total.toLocaleString('id-ID')}
-                </h2>
-            </div>
-
-            {/* Breakdown Cards */}
-            <div className="relative z-10 space-y-3">
-                {/* Item Price */}
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-white/60 border border-pink-100/50 hover:bg-white/80 transition-colors">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-pink-100 rounded-lg text-pink-500">
-                            <ShoppingBag size={18} />
-                        </div>
-                        <span className="text-sm font-bold text-gray-600">Base Price</span>
-                    </div>
-                    <span className="font-bold text-gray-800">
-            {result.itemPrice.toLocaleString('id-ID')}
-          </span>
-                </div>
-
-                {/* Fees */}
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-white/60 border border-indigo-100/50 hover:bg-white/80 transition-colors">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-indigo-100 rounded-lg text-indigo-500">
-                            <Plane size={18} />
-                        </div>
-                        <span className="text-sm font-bold text-gray-600">Intl. Fees</span>
-                    </div>
-                    <span className="font-bold text-gray-800">
-            {result.fees.toLocaleString('id-ID')}
-          </span>
+                        {displayTotal.toLocaleString('id-ID')}
+                    </motion.div>
                 </div>
             </div>
-
-            {/* Disclaimer */}
-            <div className="relative z-10 mt-8 pt-6 border-t border-gray-200/50">
-                <p className="text-[10px] text-center text-gray-400 font-medium leading-relaxed">
-                    *Estimasi harga (belum termasuk pajak/ems). <br/>
-                    Harga final saat tagihan.
-                </p>
-            </div>
-        </div>
+        </motion.div>
     );
 }
